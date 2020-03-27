@@ -1,24 +1,40 @@
-# README
+# Sample application
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Getting Started
 
-Things you may want to cover:
+### Prepare dependencies
 
-* Ruby version
+Some gems may have native extensions, so you must have GCC installed on your development environment.
+Then, your need to install software dependencies:
 
-* System dependencies
+Using macOS:
 
-* Configuration
+```bash
+brew tap Homebrew/bundle
+brew bundle
+```
 
-* Database creation
+### Bootstrap and run application
 
-* Database initialization
+1. Clone application repository
+```bash
+git clone git@github.com:ArthurZaharov/blogist.git
+```
 
-* How to run the test suite
+2. Run setup script
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+bin/setup
+```
 
-* Deployment instructions
+3. Run test and quality suits to make sure all dependencies are satisfied and applications works correctly before making changes.
 
-* ...
+```bash
+bin/tests
+```
+
+4. Run application
+
+```bash
+bin/server
+```
