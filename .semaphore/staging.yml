@@ -1,13 +1,24 @@
 version: v1.0
 name: Staging
-blocks:
-  - name: Deploy to Staging
-    task:
-      jobs:
-        - name: Deploy
-          commands:
-            - echo "deploy to staging"
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+blocks:
+  - name: Deploy to Staging
+    task:
+      secrets:
+        - name: blogist-staging-heroku
+      env_vars:
+        - name: HEROKU_REMOTE
+          value: https://git.heroku.com/fsblogist.git
+      jobs:
+      - name: Push code
+        commands:
+          - checkout --use-cache
+          - ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+          - chmod 600 ~/.ssh/id_rsa_blogist_staging
+          - ssh-add ~/.ssh/id_rsa_blogist_staging
+          - git config --global url.ssh://git@heroku.com/.insteadOf https://git.heroku.com/
+          - git remote add heroku $HEROKU_REMOTE
+          - git push heroku -f $SEMAPHORE_GIT_BRANCH:master
