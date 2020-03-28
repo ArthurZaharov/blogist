@@ -1,0 +1,37 @@
+version: v1.0
+name: Blogist
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+execution_time_limit:
+  minutes: 40
+auto_cancel:
+  running:
+    when: "true"
+fail_fast:
+  stop:
+    when: 'true'
+blocks:
+  - name: Run Tests
+    task:
+      env_vars:
+        - name: DATABASE_URL
+          value: 'postgresql://postgres:@0.0.0.0:5432/myapp_test'
+        - name: RAILS_ENV
+          value: test
+      jobs:
+        - name: Run Tests
+          commands:
+            - checkout
+            - sem-service start postgres 11
+            - cache restore
+            - bundle install --deployment -j 4 --path vendor/bundle --without development staging production
+            - cache store
+            - bin/setup
+            - bin/ci
+promotions:
+  - name: Staging
+    pipeline_file: staging.yml
+    auto_promote:
+      when: branch = 'master' AND result = 'passed'
