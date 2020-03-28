@@ -11,7 +11,7 @@ blocks:
         - name: blogist-staging-heroku
       env_vars:
         - name: HEROKU_REMOTE
-          value: https://git.heroku.com/fsblogist.git
+          value: https://git.heroku.com/blogist-staging.git
       jobs:
       - name: Push code
         commands:
